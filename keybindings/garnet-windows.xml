@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<KeyListEntries
+    group="system"
+    schema="org.gnome.shell.extensions.garnet"
+    name="Manage windows and their layouts"
+>
+  <KeyListEntry
+        name="layout-cycle-forward"
+        description="Cycle layout forward"
+    />
+  <KeyListEntry
+        name="layout-cycle-backward"
+        description="Cycle layout backward"
+    />
+  <KeyListEntry
+        name="windows-cycle-forward"
+        description="Cycle windows within a layout"
+    />
+  <KeyListEntry
+        name="windows-cycle-backward"
+        description="Cycle windows backward within a layout"
+    />
+</KeyListEntries>

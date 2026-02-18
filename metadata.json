@@ -1,0 +1,8 @@
+{
+  "name": "Garnet",
+  "description": "Bedazzling",
+  "uuid": "garnet@rtko.eu",
+  "url": "https://github.com/iisakkirotko/garnet",
+  "settings-schema": "org.gnome.shell.extensions.garnet",
+  "shell-version": ["45", "46", "47", "48", "49"]
+}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<KeyListEntries
+    group="system"
+    schema="org.gnome.shell.extensions.garnet"
+    name="Manage your focus and, optionally, cursor"
+>
+  <KeyListEntry
+        name="focus-cycle-window-forward"
+        description="Move focus to the next window within the workspace"
+    />
+  <KeyListEntry
+        name="focus-cycle-window-backward"
+        description="Move focus to the previous window within the workspace"
+    />
+  <KeyListEntry
+        name="focus-cycle-workspace-forward"
+        description="Move focus to the next workspace"
+    />
+  <KeyListEntry
+        name="focus-cycle-workspace-backward"
+        description="Move focus to the previous workspace"
+    />
+</KeyListEntries>

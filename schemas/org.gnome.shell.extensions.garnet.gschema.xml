@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<schemalist>
+  <schema
+        id="org.gnome.shell.extensions.garnet"
+        path="/org/gnome/shell/extensions/garnet/"
+    >
+    <key name="padding-inner" type="i">
+      <default>8</default>
+      <summary>Inner padding</summary>
+      <description>Padding between windows</description>
+    </key>
+    <key name="cursor-follows-focus" type="b">
+    <default>true</default>
+    <summary>Cursor follows window focus</summary>
+    <description
+            >Whether to automatically move the cursor to the window that's currently focused.</description>
+    </key>
+
+    <!-- layout -->
+    <key name="layout-cycle-forward" type="as">
+        <default><![CDATA[['<Shift><Alt>Space']]]></default>
+        <summary>Switch the current workspace to the next layout</summary>
+    </key>
+    <key name="layout-cycle-backward" type="as">
+        <default><![CDATA[['<Shift><Super><Alt>Space']]]></default>
+        <summary>Switch the current workspace to the previous layout</summary>
+    </key>
+
+    <!-- window -->
+    <key name="windows-cycle-forward" type="as">
+        <default><![CDATA[['<Shift><Super><Alt>k']]]></default>
+        <summary
+            >Within the current layout, cycle windows forward. The window in the current first layout element is sent to the last one, and so on.</summary>
+    </key>
+    <key name="windows-cycle-backward" type="as">
+        <default><![CDATA[['<Shift><Super><Alt>h']]]></default>
+        <summary
+            >Within the current layout, cycle windows backward. The window in the current last layout element is sent to the first one, and so on.</summary>
+    </key>
+
+    <!-- focus -->
+    <key name="focus-cycle-window-forward" type="as">
+        <default><![CDATA[['<Shift><Alt>k']]]></default>
+        <summary>Focus the next window in the queue</summary>
+    </key>
+    <key name="focus-cycle-window-backward" type="as">
+        <default><![CDATA[['<Shift><Alt>h']]]></default>
+        <summary>Focus the previous window in the queue</summary>
+    </key>
+    <key name="focus-cycle-workspace-forward" type="as">
+        <default><![CDATA[['<Shift><super><Alt>l']]]></default>
+        <summary>Focus the next workspace in the queue</summary>
+    </key>
+    <key name="focus-cycle-workspace-backward" type="as">
+        <default><![CDATA[['<Shift><Super><Alt>g']]]></default>
+        <summary>Focus the previous workspace in the queue</summary>
+    </key>
+  </schema>
+</schemalist>

@@ -129,7 +129,10 @@ export class LayoutManager {
     let acc = 0;
     let otherAcc = 0;
     for (let i = 0; i < windows; i++) {
-      const win = layout.windows[i]!;
+      // Cycle through the window sizes in the perpendicular direction
+      // Until we have accounted for all windows
+      const winIndex = i % layout.windows.length;
+      const win = layout.windows[winIndex]!;
       const otherGrowth = win[other];
       if (otherGrowth === null) {
         throw new LayoutError(

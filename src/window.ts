@@ -218,9 +218,13 @@ class Window implements IWindow {
   }
 
   public moveResize(x: number, y: number, width: number, height: number) {
-    if (!this._window.allows_move || !this._window.allows_resize) {
+    if (
+      !this._window.isAlive ||
+      !this._window.allows_move ||
+      !this._window.allows_resize
+    ) {
       console.error(
-        `Attempted to move & resize a window ${this._window.get_id()} that doesn't allow (at least) one of the operations.`,
+        `[GARNET] - Attempted to move & resize a window that doesn't allow (at least) one of the operations.`,
       );
       return;
     }
@@ -301,7 +305,7 @@ export class Workspace implements IWorkspace {
         const win = windows.at(i);
         if (win === undefined) {
           console.error(
-            `Window ${i} of ${windows.length} is undefined. Skipping.`,
+            `[GARNET] - Window ${i} of ${windows.length} is undefined. Skipping.`,
           );
           continue;
         }
@@ -330,6 +334,8 @@ export class Workspace implements IWorkspace {
   }
 
   public changeLayout(layout: LayoutType) {
+    const layoutObj = this.ext.layouts.get(layout);
+    console.log(`[GARNET] - Setting layout of workspace to ${layoutObj.name}`);
     this._layout = layout;
     this.drawWindows();
   }
@@ -381,9 +387,10 @@ export class Workspace implements IWorkspace {
     }
 
     const layout = this.ext.layouts.get(this._layout);
+    console.log(`[GARNET] - Drawing with layout ${layout.name}`);
     let maxWindows: number | undefined = undefined;
     if (
-      layout.windows.every((win) => win.height !== null) ||
+      layout.windows.every((win) => win.height !== null) &&
       layout.windows.every((win) => win.width !== null)
     ) {
       maxWindows = layout.windows.length;
@@ -394,7 +401,7 @@ export class Workspace implements IWorkspace {
     const [columnSize, rowSize] = this.getLayoutUnits(layout, renderWindows);
 
     console.log(
-      `[GARNET] -   Drawing windows with column size ${columnSize}px, and row size ${rowSize}px`,
+      `[GARNET] - Drawing windows with column size ${columnSize}px, and row size ${rowSize}px`,
     );
 
     // We iterate through the windows, starting at the top-left of the work area, proceeding to the right column by column
@@ -409,8 +416,8 @@ export class Workspace implements IWorkspace {
 
     for (let i = 0; i < renderWindows.length; i++) {
       const window = renderWindows.at(i)!;
-      const colWidth = layout.windows.at(i)!.width || 1;
-      let rowHeight = layout.windows.at(i)!.height || 1;
+      const colWidth = layout.windows.at(i)?.width || 1;
+      let rowHeight = layout.windows.at(i)?.height || 1;
 
       if (i === renderWindows.length) {
         // For the last window, take up all remaining vertical workspaces

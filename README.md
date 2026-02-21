@@ -1,15 +1,27 @@
 # garnet
 
-To install dependencies:
+## Install
+
+Use make to install the extensions:
 
 ```bash
-bun install
+make install
 ```
 
-To run:
+And then enable the extension:
 
 ```bash
-bun run src/extension.ts
+gnome-extensions enable garnet@rtko.eu
 ```
 
-This project was created using `bun init` in bun v1.3.6. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+Or do the equivalent through the Gnome extensions application.
+
+## Development
+
+Run the install command from above, and then develop in a windowed gnome session:
+
+```bash
+dbus-run-session -- gnome-shell --devkit
+```
+
+Potentially you'll need to install additional dependencies for this, see https://gjs.guide/extensions/development/creating.html#wayland-sessions.

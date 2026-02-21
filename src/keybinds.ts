@@ -10,14 +10,14 @@ export class KeybindManager {
     "layout-cycle-forward": () => {
       const ws = this.ext.wm.getCurrentWorkspace();
       console.log(
-        `[GARNET] - Executing layout-cycle-forward on workspace ${ws}`,
+        `[GARNET] - Executing layout-cycle-forward on workspace nr ${this.ext.focus.currentWorkspace}`,
       );
       ws?.cycleLayout();
     },
     "layout-cycle-backward": () => {
       const ws = this.ext.wm.getCurrentWorkspace();
       console.log(
-        `[GARNET] - Executing layout-cycle-backward on workspace ${ws}`,
+        `[GARNET] - Executing layout-cycle-backward on workspace nr ${this.ext.focus.currentWorkspace}`,
       );
       ws?.cycleLayout(-1);
     },
@@ -25,14 +25,14 @@ export class KeybindManager {
     "windows-cycle-forward": () => {
       const ws = this.ext.wm.getCurrentWorkspace();
       console.log(
-        `[GARNET] - Executing windows-cycle-forward on workspace ${ws}`,
+        `[GARNET] - Executing windows-cycle-forward on workspace nr ${this.ext.focus.currentWorkspace}`,
       );
       ws?.cycleWindowOrder();
     },
     "windows-cycle-backward": () => {
       const ws = this.ext.wm.getCurrentWorkspace();
       console.log(
-        `[GARNET] - Executing windows-cycle-backward on workspace ${ws}`,
+        `[GARNET] - Executing windows-cycle-backward on workspace nr ${this.ext.focus.currentWorkspace}`,
       );
       ws?.cycleWindowOrder(-1);
     },

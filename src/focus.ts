@@ -4,12 +4,12 @@ import type { IWindow } from "./window.js";
 export class FocusManager {
   private ext: Garnet;
   private currentWindow: number | null;
-  private currentWorkspace: number;
+  private _currentWorkspace: number;
 
   constructor(extention: Garnet) {
     this.ext = extention;
     // TODO: Use actual values
-    this.currentWorkspace = 0;
+    this._currentWorkspace = 0;
     this.currentWindow = 0;
   }
 
@@ -27,7 +27,7 @@ export class FocusManager {
     if (idx === null) {
       return;
     }
-    const ws = this.ext.wm.getWorkspace(this.currentWorkspace);
+    const ws = this.ext.wm.getWorkspace(this._currentWorkspace);
     if (!ws) {
       console.warn("[GARNET] - No workspace to select a window from.");
       return;
@@ -36,7 +36,7 @@ export class FocusManager {
     const window = ws.getWindow(idx);
     if (!window) {
       console.error(
-        `Tried to select a non-existent window ${idx} on workspace ${this.currentWorkspace}`,
+        `Tried to select a non-existent window ${idx} on workspace ${this._currentWorkspace}`,
       );
       return;
     }
@@ -47,9 +47,9 @@ export class FocusManager {
   public nextWorkspace() {
     this.incrementWorkspaceIndex(1);
     console.log(
-      `[GARNET] - Cycling focus forward to workspace nr ${this.currentWorkspace}`,
+      `[GARNET] - Cycling focus forward to workspace nr ${this._currentWorkspace}`,
     );
-    const ws = this.ext.wm.getWorkspace(this.currentWorkspace);
+    const ws = this.ext.wm.getWorkspace(this._currentWorkspace);
     if (!ws) {
       console.warn("[GARNET] - No workspace to select a window from.");
       return;
@@ -61,9 +61,9 @@ export class FocusManager {
   public prevWorkspace() {
     this.incrementWorkspaceIndex(-1);
     console.log(
-      `[GARNET] - Cycling focus backward to workspace nr ${this.currentWorkspace}`,
+      `[GARNET] - Cycling focus backward to workspace nr ${this._currentWorkspace}`,
     );
-    const ws = this.ext.wm.getWorkspace(this.currentWorkspace);
+    const ws = this.ext.wm.getWorkspace(this._currentWorkspace);
     if (!ws) {
       console.warn("[GARNET] - No workspace to select a window from.");
       return;
@@ -96,7 +96,7 @@ export class FocusManager {
   }
 
   private incrementWindowIndex(increment: 1 | -1 = 1) {
-    const ws = this.ext.wm.getWorkspace(this.currentWorkspace);
+    const ws = this.ext.wm.getWorkspace(this._currentWorkspace);
     if (!ws) {
       console.warn("[GARNET] - No workspace to select a window from.");
       return;
@@ -115,11 +115,15 @@ export class FocusManager {
   private incrementWorkspaceIndex(increment: 1 | -1 = 1) {
     const workspaces = this.ext.wm.workspaces;
     if (workspaces.length === 1) {
-      this.currentWorkspace = 1;
-      return this.currentWorkspace;
+      this._currentWorkspace = 1;
+      return this._currentWorkspace;
     }
-    this.currentWorkspace =
-      (workspaces.length % this.currentWorkspace) + increment;
-    return this.currentWorkspace;
+    this._currentWorkspace =
+      (workspaces.length % this._currentWorkspace) + increment;
+    return this._currentWorkspace;
+  }
+
+  public get currentWorkspace(): number {
+    return this._currentWorkspace;
   }
 }

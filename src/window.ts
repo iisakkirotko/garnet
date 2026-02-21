@@ -171,7 +171,7 @@ class Window implements IWindow {
   }
 
   public activate() {
-    this._window.activate(global.get_current_time());
+    this._window.focus(global.get_current_time());
   }
 
   public close() {

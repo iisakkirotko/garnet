@@ -102,24 +102,25 @@ export class FocusManager {
       return;
     }
 
-    const workspaceWindows = ws.windows;
-    if (workspaceWindows.length < 1) {
+    const workspaceWindows = ws.windows.length;
+    if (workspaceWindows < 1) {
       this.currentWindow = null;
       return this.currentWindow;
     }
-    const current = this.currentWindow || 1;
-    this.currentWindow = (workspaceWindows.length % current) + increment;
+    const current = this.currentWindow === null ? 0 : this.currentWindow;
+    this.currentWindow =
+      (workspaceWindows + current + increment) % workspaceWindows;
     return this.currentWindow;
   }
 
   private incrementWorkspaceIndex(increment: 1 | -1 = 1) {
-    const workspaces = this.ext.wm.workspaces;
-    if (workspaces.length === 1) {
+    const workspaces = this.ext.wm.workspaces.length;
+    if (workspaces === 1) {
       this._currentWorkspace = 1;
       return this._currentWorkspace;
     }
     this._currentWorkspace =
-      (workspaces.length % this._currentWorkspace) + increment;
+      (workspaces + this._currentWorkspace + increment) % workspaces;
     return this._currentWorkspace;
   }
 

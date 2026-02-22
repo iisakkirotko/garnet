@@ -431,13 +431,13 @@ export class Workspace implements IWorkspace {
       const colWidth = layout.windows.at(i)?.width || 1;
       let rowHeight = layout.windows.at(i)?.height || 1;
 
-      if (i === renderWindows.length) {
-        // For the last window, take up all remaining vertical workspaces
-        rowHeight = maxRows - cursorPos.y;
-      }
-
       const windowWidth = colWidth * columnSize;
-      const windowHeight = rowHeight * rowSize;
+      let windowHeight = rowHeight * rowSize;
+
+      if (i === renderWindows.length - 1) {
+        // For the last window, take up all remaining vertical workspaces
+        windowHeight = workArea.height + workArea.y - cursorPos.y;
+      }
 
       console.log(`[GARNET] - Drawing window ${i + 1}/${renderWindows.length}`);
       console.log(`     x: ${cursorPos.x}`);

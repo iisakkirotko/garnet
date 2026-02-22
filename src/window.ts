@@ -260,7 +260,11 @@ class Window implements IWindow {
     return this._handlers;
   }
 
-  private connectListeners() {}
+  private connectListeners() {
+    this.registerHandler("focus", (win) => {
+      this.ext.focus.setSelectedWindow(this);
+    });
+  }
 }
 
 export interface IWorkspace {
@@ -281,6 +285,8 @@ export interface IWorkspace {
 
   addWindow: (window: Meta.Window) => void;
   getWindow: (idx: number) => IWindow | undefined;
+  getWindowByObj: (window: Meta.Window) => IWindow | undefined;
+  getWindowIndex: (window: IWindow) => number | undefined;
 }
 
 export class Workspace implements IWorkspace {
@@ -478,6 +484,10 @@ export class Workspace implements IWorkspace {
 
   public getWindowByObj(window: Meta.Window): IWindow | undefined {
     return this.windows.find((win) => win.is(window));
+  }
+
+  public getWindowIndex(window: IWindow): number | undefined {
+    return this.windows.indexOf(window);
   }
 
   private getScreenRect(): Mtk.Rectangle {

@@ -44,6 +44,28 @@ export class FocusManager {
     this.moveCursor(window);
   }
 
+  /**
+   * Switch focus to another window, without doing any other actions (such as moving cursor).
+   * Mainly for if focus is changed from outside of Garnet, such as through user action.
+   *
+   * @param window The window object
+   */
+  public setSelectedWindow(window: IWindow) {
+    const ws = this.ext.wm.getWorkspace(this.currentWorkspace);
+    if (!ws) {
+      console.error(`[GARNET] - Couldn't get current workspace`);
+      return;
+    }
+    const winIdx = ws.getWindowIndex(window);
+    if (winIdx === undefined) {
+      console.error(
+        `Could not find window ${window.window.get_title()} in active workspace ${this.currentWorkspace}`,
+      );
+      return;
+    }
+    this.currentWindow = winIdx;
+  }
+
   public nextWorkspace() {
     this.incrementWorkspaceIndex(1);
     console.log(

@@ -492,9 +492,10 @@ export class Workspace implements IWorkspace {
   }
 
   public removeWindow(window: IWindow): void {
+    console.log("Removing window from workspace");
     window.close();
     this.windows = this.windows.filter((win) => {
-      return win === window;
+      return win !== window;
     });
     this.drawWindows();
   }

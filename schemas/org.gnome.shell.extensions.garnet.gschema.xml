@@ -33,7 +33,7 @@
             >Within the current layout, cycle windows forward. The window in the current first layout element is sent to the last one, and so on.</summary>
     </key>
     <key name="windows-cycle-backward" type="as">
-        <default><![CDATA[['<Shift><Super><Alt>h']]]></default>
+        <default><![CDATA[['<Shift><Super><Alt>j']]]></default>
         <summary
             >Within the current layout, cycle windows backward. The window in the current last layout element is sent to the first one, and so on.</summary>
     </key>
@@ -44,7 +44,7 @@
         <summary>Focus the next window in the queue</summary>
     </key>
     <key name="focus-cycle-window-backward" type="as">
-        <default><![CDATA[['<Shift><Alt>h']]]></default>
+        <default><![CDATA[['<Shift><Alt>j']]]></default>
         <summary>Focus the previous window in the queue</summary>
     </key>
     <key name="focus-cycle-workspace-forward" type="as">
@@ -52,7 +52,7 @@
         <summary>Focus the next workspace in the queue</summary>
     </key>
     <key name="focus-cycle-workspace-backward" type="as">
-        <default><![CDATA[['<Shift><Super><Alt>g']]]></default>
+        <default><![CDATA[['<Shift><Super><Alt>h']]]></default>
         <summary>Focus the previous workspace in the queue</summary>
     </key>
   </schema>

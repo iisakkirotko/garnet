@@ -3,24 +3,24 @@ import type { IWindow } from "./window.js";
 
 export class FocusManager {
   private ext: Garnet;
-  private currentWindow: number | null;
+  private _currentWindow: number | null;
   private _currentWorkspace: number;
 
   constructor(extention: Garnet) {
     this.ext = extention;
     // TODO: Use actual values
     this._currentWorkspace = 0;
-    this.currentWindow = 0;
+    this._currentWindow = 0;
   }
 
   public nextWindow() {
     this.incrementWindowIndex(1);
-    this.selectWindow(this.currentWindow);
+    this.selectWindow(this._currentWindow);
   }
 
   public prevWindow() {
     this.incrementWindowIndex(-1);
-    this.selectWindow(this.currentWindow);
+    this.selectWindow(this._currentWindow);
   }
 
   public selectWindow(idx: number | null) {
@@ -63,7 +63,7 @@ export class FocusManager {
       );
       return;
     }
-    this.currentWindow = winIdx;
+    this._currentWindow = winIdx;
   }
 
   public nextWorkspace() {
@@ -126,13 +126,13 @@ export class FocusManager {
 
     const workspaceWindows = ws.windows.length;
     if (workspaceWindows < 1) {
-      this.currentWindow = null;
-      return this.currentWindow;
+      this._currentWindow = null;
+      return this._currentWindow;
     }
-    const current = this.currentWindow === null ? 0 : this.currentWindow;
-    this.currentWindow =
+    const current = this._currentWindow === null ? 0 : this._currentWindow;
+    this._currentWindow =
       (workspaceWindows + current + increment) % workspaceWindows;
-    return this.currentWindow;
+    return this._currentWindow;
   }
 
   private incrementWorkspaceIndex(increment: 1 | -1 = 1) {
@@ -148,5 +148,9 @@ export class FocusManager {
 
   public get currentWorkspace(): number {
     return this._currentWorkspace;
+  }
+
+  public get currentWindow(): number | null {
+    return this._currentWindow;
   }
 }

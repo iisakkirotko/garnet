@@ -173,6 +173,8 @@ class Window implements IWindow {
   }
 
   public activate() {
+    // Bring the window to the front
+    this._window.raise();
     this._window.focus(global.get_current_time());
   }
 
@@ -398,6 +400,7 @@ export class Workspace implements IWorkspace {
       return;
     }
 
+    let stackWindows = false;
     const layout = this.ext.layouts.get(this._layout);
     console.log(`[GARNET] - Drawing with layout ${layout.name}`);
     let maxWindows: number | undefined = undefined;
@@ -406,6 +409,13 @@ export class Workspace implements IWorkspace {
       layout.windows.every((win) => win.width !== null)
     ) {
       maxWindows = layout.windows.length;
+    }
+
+    if (maxWindows === 1) {
+      // Special case for full screen layout, so that focus cycling also
+      // draws the new window fullscreen
+      maxWindows = undefined;
+      stackWindows = true;
     }
 
     let renderWindows = this.windows.slice(0, maxWindows);
@@ -447,12 +457,17 @@ export class Workspace implements IWorkspace {
 
       window.moveResize(cursorPos.x, cursorPos.y, windowWidth, windowHeight);
 
+      // Draw all windows on top of each other, so we don't move the cursor.
+      if (stackWindows) continue;
+
       cursorPos.y += windowHeight;
       if (cursorPos.y >= maxRows) {
         cursorPos.y = workArea.y;
         cursorPos.x += windowWidth;
       }
     }
+    // Ensure correct focus after draw
+    this.ext.focus.selectWindow(this.ext.focus.currentWindow);
   }
 
   public get active() {
@@ -543,10 +558,12 @@ export class Workspace implements IWorkspace {
   private connectWindowRemoveListener() {
     const handler = this.workspace.connect("window-removed", (source, arg0) => {
       const win = this.getWindowByObj(arg0);
-      console.log(`Removing window ${arg0.get_title()} from workspace.`);
+      console.log(
+        `[GARNET] - Removing window ${arg0.get_title()} from workspace.`,
+      );
       if (win === undefined) {
         console.warn(
-          `Trying to remove a window that is closing, but it couldn't be found in this workspace`,
+          `[GARNET] - Trying to remove a window that is closing, but it couldn't be found in this workspace`,
         );
         return;
       }

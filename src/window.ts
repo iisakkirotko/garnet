@@ -152,14 +152,16 @@ export interface IWindow {
 
 class Window implements IWindow {
   private ext: Garnet;
+  private ws: IWorkspace;
   private _window: Meta.Window;
   private _position: [number, number];
   private _width: number;
   private _height: number;
   private _handlers: number[] = [];
 
-  constructor(ext: Garnet, window: Meta.Window) {
+  constructor(ext: Garnet, ws: IWorkspace, window: Meta.Window) {
     this.ext = ext;
+    this.ws = ws;
     this._window = window;
 
     const rect = this.getRect();
@@ -263,6 +265,10 @@ class Window implements IWindow {
   private connectListeners() {
     this.registerHandler("focus", (win) => {
       this.ext.focus.setSelectedWindow(this);
+    });
+    // To ensure that when the window is (first) shown, the layout is redrawn
+    this.registerHandler("shown", (win) => {
+      this.ws.drawWindows();
     });
   }
 }
@@ -466,7 +472,7 @@ export class Workspace implements IWorkspace {
   }
 
   public addWindow(window: Meta.Window): void {
-    this.windows.push(new Window(this.ext, window));
+    this.windows.push(new Window(this.ext, this, window));
     this.drawWindows();
   }
 

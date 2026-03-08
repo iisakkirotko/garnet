@@ -135,6 +135,12 @@ export interface IWindow {
   readonly width: number;
   readonly window: Meta.Window;
   readonly handlers: number[];
+  readonly alive: boolean;
+  readonly floating: boolean;
+  readonly resizable: boolean;
+  readonly movable: boolean;
+  readonly moveResizable: boolean;
+  readonly tilable: boolean;
 
   move: (x: number, y: number) => void;
   resize: (width: number, height: number) => void;
@@ -223,11 +229,7 @@ class Window implements IWindow {
   }
 
   public moveResize(x: number, y: number, width: number, height: number) {
-    if (
-      !this._window.isAlive ||
-      !this._window.allows_move ||
-      !this._window.allows_resize
-    ) {
+    if (!this.alive || !this.moveResizable) {
       console.error(
         `[GARNET] - Attempted to move & resize a window that doesn't allow (at least) one of the operations.`,
       );
@@ -265,12 +267,54 @@ class Window implements IWindow {
     return this._handlers;
   }
 
+  public get alive() {
+    return this._window.isAlive;
+  }
+
+  public get floating() {
+    return this._window.is_floating();
+  }
+
+  public get resizable() {
+    return this.window.allows_resize();
+  }
+
+  public get movable() {
+    return this.window.allows_move();
+  }
+
+  public get moveResizable() {
+    return !this.floating && this.movable && this.resizable;
+  }
+
+  public get isTransient() {
+    return this._window.get_transient_for() !== null;
+  }
+
+  public get tilable() {
+    return (
+      this.alive &&
+      this.moveResizable &&
+      !this.floating &&
+      this._window.window_type == Meta.WindowType.NORMAL
+    );
+  }
+
   private connectListeners() {
     this.registerHandler("focus", (win) => {
       this.ext.focus.setSelectedWindow(this);
     });
     // To ensure that when the window is (first) shown, the layout is redrawn
     this.registerHandler("shown", (win) => {
+      console.log(
+        `[GARNET] - Executing "shown" handler of window ${win.get_title()}`,
+      );
+      if (!this.tilable) {
+        console.log(
+          `[GARNET] - skipping drawing windows, move/resize not allowed for window ${win.get_title()}`,
+        );
+        return;
+      }
       this.ws.drawWindows();
     });
   }
@@ -393,7 +437,7 @@ export class Workspace implements IWorkspace {
     ws.changeLayout(this._layout);
   }
 
-  public drawWindows() {
+  public drawWindows(moveCursor: boolean = true) {
     console.log(
       `[GARNET] - Drawing ${this.windows.length} windows on workspace`,
     );
@@ -420,6 +464,7 @@ export class Workspace implements IWorkspace {
     }
 
     let renderWindows = this.windows.slice(0, maxWindows);
+    renderWindows = renderWindows.filter((window) => window.tilable);
 
     const [columnSize, rowSize] = this.getLayoutUnits(layout, renderWindows);
 
@@ -467,8 +512,11 @@ export class Workspace implements IWorkspace {
         cursorPos.x += windowWidth;
       }
     }
-    // Ensure correct focus after draw
-    this.ext.focus.selectWindow(this.ext.focus.currentWindow);
+    if (moveCursor) {
+      // Ensure correct focus after draw
+      console.log("[GARNET] - Moving focus");
+      this.ext.focus.selectWindow(this.ext.focus.currentWindow);
+    }
   }
 
   public get active() {
@@ -493,11 +541,13 @@ export class Workspace implements IWorkspace {
 
   public removeWindow(window: IWindow): void {
     console.log("Removing window from workspace");
+    const wasTilable = window.tilable;
     window.close();
     this.windows = this.windows.filter((win) => {
       return win !== window;
     });
-    this.drawWindows();
+    // Only move cursor to new focus if the closed window was a tiled one
+    this.drawWindows(wasTilable);
   }
 
   public getWindow(idx: number) {
@@ -567,8 +617,9 @@ export class Workspace implements IWorkspace {
         );
         return;
       }
+      const wasTilable = win?.tilable;
       this.removeWindow(win);
-      this.drawWindows();
+      this.drawWindows(wasTilable);
     });
     this.handlers.push(handler);
   }

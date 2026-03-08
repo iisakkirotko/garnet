@@ -208,7 +208,7 @@ class Window implements IWindow {
   }
 
   public move(x: number, y: number) {
-    if (!this._window.allows_move) {
+    if (!this.isMovable) {
       console.error(
         `Attempted to move a window ${this._window.get_id()} that doesn't allow the operation.`,
       );
@@ -218,7 +218,7 @@ class Window implements IWindow {
   }
 
   public resize(width: number, height: number) {
-    if (!this._window.allows_resize) {
+    if (!this.isResizable) {
       console.error(
         `Attempted to resize a window ${this._window.get_id()} that doesn't allow the operation.`,
       );

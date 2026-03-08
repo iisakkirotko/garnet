@@ -512,7 +512,7 @@ export class Workspace implements IWorkspace {
         cursorPos.x += windowWidth;
       }
     }
-    if (moveCursor) {
+    if (moveCursor && this.ext.settings.cursorFollowsFocus) {
       // Ensure correct focus after draw
       console.log("[GARNET] - Moving focus");
       this.ext.focus.selectWindow(this.ext.focus.currentWindow);

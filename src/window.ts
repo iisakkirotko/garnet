@@ -229,6 +229,8 @@ class Window implements IWindow {
   }
 
   public moveResize(x: number, y: number, width: number, height: number) {
+    this._window.set_unmaximize_flags(Meta.MaximizeFlags.BOTH);
+    this._window.unmaximize();
     if (!this.isAlive || !this.isMoveResizable) {
       console.error(
         `[GARNET] - Attempted to move & resize a window that doesn't allow (at least) one of the operations.`,
@@ -294,7 +296,6 @@ class Window implements IWindow {
   public get isTilable() {
     return (
       this.isAlive &&
-      this.isMoveResizable &&
       !this.isFloating &&
       this._window.window_type == Meta.WindowType.NORMAL
     );

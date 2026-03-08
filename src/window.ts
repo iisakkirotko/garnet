@@ -82,7 +82,7 @@ export class WindowManager {
     console.log(
       `[GARNET] - Active workspace should be nr ${activeWorkspace.index()}`,
     );
-    const res = this.workspaces.find((ws) => ws.active);
+    const res = this.getWorkspaceByObj(activeWorkspace);
     console.log(`Found active workspace to be ${res}`);
     return res;
   }
@@ -108,6 +108,7 @@ export class WindowManager {
   }
 
   public removeWorkspace(source: Meta.WorkspaceManager, idx: number) {
+    console.log(`[GARNET] - Removing workspace with Gnome index ${idx}`);
     const metaWs = source.get_workspace_by_index(idx);
     if (metaWs === null) {
       console.warn(

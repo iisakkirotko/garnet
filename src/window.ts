@@ -315,7 +315,7 @@ export class Workspace implements IWorkspace {
     console.log(`Creating workspace with ${windows.length} windows`);
 
     if (windows.length > 0) {
-      for (let i = 0; i <= windows.length; i++) {
+      for (let i = 0; i < windows.length; i++) {
         console.log(`Creating window ${i}`);
         const win = windows.at(i);
         if (win === undefined) {

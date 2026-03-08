@@ -488,7 +488,6 @@ export class Workspace implements IWorkspace {
 
   public addWindow(window: Meta.Window): void {
     this.windows.push(new Window(this.ext, this, window));
-    this.drawWindows();
   }
 
   public removeWindow(window: IWindow): void {
@@ -551,7 +550,6 @@ export class Workspace implements IWorkspace {
     const handler = this.workspace.connect("window-added", (source, arg0) => {
       console.log(`Adding window ${arg0.get_title()} to workspace.`);
       this.addWindow(arg0);
-      this.drawWindows();
     });
     this.handlers.push(handler);
   }
